@@ -1,14 +1,13 @@
 import { Popover, PopoverTrigger, PopoverContent } from "@heroui/react";
 import { Button } from "@heroui/button";
 import { useState } from "react";
-import { UisCheck } from '@iconscout/react-unicons-solid'
 
 import VkVideoIcon from "@/assets/vk_video.png";
+import { CheckmarkIcon } from "@/components/icons.tsx";
 
 export default function SubscribtionButton() {
   const [isPopoverOpened, setPopoverOpened] = useState<boolean>(false);
   const [subVk, setSubVk] = useState<boolean>(false);
-  const [subVkVideo, setSubVkVideo] = useState<boolean>(false);
 
   const onSubVkClick = () => {
     setSubVk(!subVk);
@@ -27,7 +26,7 @@ export default function SubscribtionButton() {
       <PopoverTrigger>
         <Button
           color={subVk ? "default" : "secondary"}
-          startContent={subVk ? <UisCheck /> : null}
+          startContent={subVk ? <CheckmarkIcon /> : null}
           variant={subVk ? "flat" : "solid"}
           onPress={onSubVkClick}
         >
