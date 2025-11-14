@@ -1,0 +1,14 @@
+import DefaultLayout from "@/layouts/default";
+import SubscribtionButton from "@/components/subsribtion/subscribtion-button.tsx";
+
+export default function IndexPage() {
+  return (
+    <DefaultLayout>
+      <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
+        <div className="inline-block max-w-lg text-center justify-center">
+          <SubscribtionButton />
+        </div>
+      </section>
+    </DefaultLayout>
+  );
+}
