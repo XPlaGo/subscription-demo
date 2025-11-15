@@ -149,13 +149,13 @@ export function SubscribtionButton(props: {
         </PopoverContent>
       </Popover>
       <div
-        className={"grid grid-cols-2 gap-5 items-center justify-center"}
+        className={"grid grid-cols-2 gap-3 items-center justify-center"}
         style={{ gridTemplateColumns: "auto 1fr" }}
       >
         <MainLogo vkMode={props.vkMode} />
         {props.isMainSubscribed ? (
           <Button
-            className={"w-40"}
+            className={"w-40 font-medium"}
             color={"default"}
             startContent={<CheckmarkIcon height={20} width={20} />}
             variant={"flat"}
@@ -168,7 +168,7 @@ export function SubscribtionButton(props: {
           </Button>
         ) : (
           <Button
-            className={"w-40"}
+            className={"w-40 font-medium"}
             color={"secondary"}
             variant={"solid"}
             onPress={() => {
@@ -208,8 +208,11 @@ function SubscribePopoverActions(props: {
 }) {
   return (
     <motion.div layout className={"grid grid-cols-2 items-center gap-2 w-full"}>
-      <Button onPress={props.onCancel}>Нет</Button>
+      <Button className={"font-medium"} onPress={props.onCancel}>
+        Нет
+      </Button>
       <Button
+        className={"font-medium"}
         color={"primary"}
         variant={"solid"}
         onPress={props.onSecondarySubscribed}
@@ -242,6 +245,7 @@ function GoToPopoverActions(props: { goToVkVideo: () => void }) {
   return (
     <motion.div layout className={"grid grid-cols-1 items-center gap-2 w-full"}>
       <Button
+        className={"font-medium"}
         color={"secondary"}
         endContent={<GoToIcon height={20} width={20} />}
         variant={"solid"}
@@ -259,9 +263,9 @@ function AccountLabel(props: { accountName: string }) {
 function MainLogo(props: { vkMode: VkMode }) {
   switch (props.vkMode) {
     case VkMode.VkVideo:
-      return <VkVideoLogo height={32} width={32} />;
+      return <VkVideoLogo height={40} width={40} />;
     case VkMode.Vk:
-      return <VkLogo height={32} width={32} />;
+      return <VkLogo height={40} width={40} />;
   }
 }
 
