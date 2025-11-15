@@ -7,8 +7,8 @@ import { VkLogo, VkVideoLogo } from "@/components/logos.tsx";
 import { CheckmarkIcon, GoToIcon } from "@/components/icons.tsx";
 
 export enum VkMode {
-  Vk = 0,
-  VkVideo = 1,
+  VkVideo = 0,
+  Vk = 1,
 }
 
 export function SubscribtionButton(props: {
@@ -31,10 +31,10 @@ export function SubscribtionButton(props: {
 
   const goToAccount = () => {
     switch (props.vkMode) {
-      case VkMode.Vk:
+      case VkMode.VkVideo:
         window.open("https://vk.ru", "_blank", "noopener,noreferrer");
         break;
-      case VkMode.VkVideo:
+      case VkMode.Vk:
         window.open("https://vkvideo.ru", "_blank", "noopener,noreferrer");
         break;
     }
@@ -65,7 +65,7 @@ export function SubscribtionButton(props: {
               }
               style={{ gridTemplateColumns: "auto 1fr" }}
             >
-              <Logo vkMode={props.vkMode} />
+              <SecondaryLogo vkMode={props.vkMode} />
               <AnimatePresence mode={"popLayout"}>
                 {props.isSecondarySubscribed ? (
                   <motion.div
@@ -148,45 +148,51 @@ export function SubscribtionButton(props: {
           </motion.div>
         </PopoverContent>
       </Popover>
-      {props.isMainSubscribed ? (
-        <Button
-          className={"w-40"}
-          color={"default"}
-          startContent={<CheckmarkIcon height={20} width={20} />}
-          variant={"flat"}
-          onPress={() => {
-            onMainUnsubscribed();
-            setOpened(false);
-          }}
-        >
-          Вы подписаны
-        </Button>
-      ) : (
-        <Button
-          className={"w-40"}
-          color={"secondary"}
-          variant={"solid"}
-          onPress={() => {
-            onMainSubscribed();
-            setOpened(true);
-          }}
-        >
-          Подписаться
-        </Button>
-      )}
+      <div
+        className={"grid grid-cols-2 gap-5 items-center justify-center"}
+        style={{ gridTemplateColumns: "auto 1fr" }}
+      >
+        <MainLogo vkMode={props.vkMode} />
+        {props.isMainSubscribed ? (
+          <Button
+            className={"w-40"}
+            color={"default"}
+            startContent={<CheckmarkIcon height={20} width={20} />}
+            variant={"flat"}
+            onPress={() => {
+              onMainUnsubscribed();
+              setOpened(false);
+            }}
+          >
+            Вы подписаны
+          </Button>
+        ) : (
+          <Button
+            className={"w-40"}
+            color={"secondary"}
+            variant={"solid"}
+            onPress={() => {
+              onMainSubscribed();
+              setOpened(true);
+            }}
+          >
+            Подписаться
+          </Button>
+        )}
+      </div>
     </div>
   );
 }
 
 function SubscribePopoverLabel(props: { accountName: string; vkMode: VkMode }) {
   switch (props.vkMode) {
-    case VkMode.Vk:
+    case VkMode.VkVideo:
       return (
         <p>
           Подписаться на <AccountLabel accountName={props.accountName} /> в VK?
         </p>
       );
-    case VkMode.VkVideo:
+    case VkMode.Vk:
       return (
         <p>
           Подписаться на <AccountLabel accountName={props.accountName} /> в VK
@@ -215,14 +221,14 @@ function SubscribePopoverActions(props: {
 }
 function GoToPopoverLabel(props: { accountName: string; vkMode: VkMode }) {
   switch (props.vkMode) {
-    case VkMode.Vk:
+    case VkMode.VkVideo:
       return (
         <p>
           Показать аккаунт <AccountLabel accountName={props.accountName} /> в
           VK?
         </p>
       );
-    case VkMode.VkVideo:
+    case VkMode.Vk:
       return (
         <p>
           Показать аккаунт <AccountLabel accountName={props.accountName} /> в VK
@@ -250,11 +256,20 @@ function AccountLabel(props: { accountName: string }) {
   return <span className={"font-bold text-nowrap"}>{props.accountName}</span>;
 }
 
-function Logo(props: { vkMode: VkMode }) {
+function MainLogo(props: { vkMode: VkMode }) {
   switch (props.vkMode) {
+    case VkMode.VkVideo:
+      return <VkVideoLogo height={32} width={32} />;
     case VkMode.Vk:
       return <VkLogo height={32} width={32} />;
+  }
+}
+
+function SecondaryLogo(props: { vkMode: VkMode }) {
+  switch (props.vkMode) {
     case VkMode.VkVideo:
+      return <VkLogo height={32} width={32} />;
+    case VkMode.Vk:
       return <VkVideoLogo height={32} width={32} />;
   }
 }
