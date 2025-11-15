@@ -1,6 +1,7 @@
 import { Popover, PopoverContent, PopoverTrigger } from "@heroui/react";
 import { Button } from "@heroui/button";
 import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 import { VkLogo, VkVideoLogo } from "@/components/logos.tsx";
 import { CheckmarkIcon, GoToIcon } from "@/components/icons.tsx";
@@ -10,23 +11,22 @@ export enum VkMode {
   VkVideo = 1,
 }
 
-export default function SubscribtionButton(props: {
+export function SubscribtionButton(props: {
   accountName: string;
   vkMode: VkMode;
+  isMainSubscribed: boolean;
+  setIsMainSubscribed: (isMainSubscribed: boolean) => void;
+  isSecondarySubscribed: boolean;
+  setIsSecondarySubscribed: (isSecondarySubscribed: boolean) => void;
 }) {
   const [isOpened, setOpened] = useState<boolean>(false);
-  const [isVkSubscribed, setIsVkSubscribed] = useState<boolean>(false);
-  const [isVkVideoSubscribed, setIsVkVideoSubscribed] =
-    useState<boolean>(false);
 
-  const onVkSubscribe = () => {
-    setIsVkSubscribed(true);
-    setIsVkVideoSubscribed(false);
+  const onMainSubscribed = () => {
+    props.setIsMainSubscribed(true);
   };
 
-  const onVkUnsubscribe = () => {
-    setIsVkSubscribed(false);
-    setIsVkVideoSubscribed(false);
+  const onMainUnsubscribed = () => {
+    props.setIsMainSubscribed(false);
   };
 
   const goToAccount = () => {
@@ -52,30 +52,110 @@ export default function SubscribtionButton(props: {
           <div />
         </PopoverTrigger>
         <PopoverContent>
-          {isVkVideoSubscribed ? (
-            <GoToVkVideoPopoverContent
-              accountName={props.accountName}
-              goToVkVideo={goToAccount}
-              vkMode={props.vkMode}
-            />
-          ) : (
-            <VkVideoSubscribePopoverContent
-              accountName={props.accountName}
-              vkMode={props.vkMode}
-              onCancel={() => setOpened(false)}
-              onVkVideoSubscribe={() => setIsVkVideoSubscribed(true)}
-            />
-          )}
+          <motion.div
+            layout
+            className={
+              "flex flex-col items-center justify-center pt-2 pb-2 pl-1 pr-1 max-w-70"
+            }
+          >
+            <motion.div
+              layout
+              className={
+                "grid grid-cols-2 items-center justify-center m-3 gap-3"
+              }
+              style={{ gridTemplateColumns: "auto 1fr" }}
+            >
+              <Logo vkMode={props.vkMode} />
+              <AnimatePresence mode={"popLayout"}>
+                {props.isSecondarySubscribed ? (
+                  <motion.div
+                    key={"gotoLabel"}
+                    layout
+                    animate={{
+                      x: 0,
+                      opacity: 1,
+                      transition: { ease: "easeInOut" },
+                    }}
+                    className={"w-full"}
+                    initial={{ x: 100, opacity: 0 }}
+                  >
+                    <GoToPopoverLabel
+                      accountName={props.accountName}
+                      vkMode={props.vkMode}
+                    />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key={"subscribeLabel"}
+                    layout
+                    animate={{
+                      x: 0,
+                      opacity: 1,
+                      transition: { ease: "easeInOut" },
+                    }}
+                    exit={{ x: -100, opacity: 0 }}
+                  >
+                    <SubscribePopoverLabel
+                      accountName={props.accountName}
+                      vkMode={props.vkMode}
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+            <AnimatePresence mode={"popLayout"}>
+              {props.isSecondarySubscribed ? (
+                <motion.div
+                  key={"gotoAction"}
+                  layout
+                  animate={{
+                    x: 0,
+                    opacity: 1,
+                    transition: { ease: "easeInOut" },
+                  }}
+                  initial={{ x: 100, opacity: 0 }}
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                  <GoToPopoverActions goToVkVideo={goToAccount} />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key={"subscribeAction"}
+                  layout
+                  animate={{
+                    x: 0,
+                    opacity: 1,
+                    transition: { ease: "easeInOut" },
+                  }}
+                  exit={{ x: -100, opacity: 0 }}
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                  <SubscribePopoverActions
+                    onCancel={() => {
+                      setOpened(false);
+                    }}
+                    onSecondarySubscribed={() =>
+                      props.setIsSecondarySubscribed(true)
+                    }
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
         </PopoverContent>
       </Popover>
-      {isVkSubscribed ? (
+      {props.isMainSubscribed ? (
         <Button
+          className={"w-40"}
           color={"default"}
           startContent={<CheckmarkIcon height={20} width={20} />}
           variant={"flat"}
-          className={"w-40"}
           onPress={() => {
-            onVkUnsubscribe();
+            onMainUnsubscribed();
             setOpened(false);
           }}
         >
@@ -83,11 +163,11 @@ export default function SubscribtionButton(props: {
         </Button>
       ) : (
         <Button
+          className={"w-40"}
           color={"secondary"}
           variant={"solid"}
-          className={"w-40"}
           onPress={() => {
-            onVkSubscribe();
+            onMainSubscribed();
             setOpened(true);
           }}
         >
@@ -98,103 +178,74 @@ export default function SubscribtionButton(props: {
   );
 }
 
-function VkVideoSubscribePopoverContent(props: {
-  onVkVideoSubscribe: () => void;
+function SubscribePopoverLabel(props: { accountName: string; vkMode: VkMode }) {
+  switch (props.vkMode) {
+    case VkMode.Vk:
+      return (
+        <p>
+          Подписаться на <AccountLabel accountName={props.accountName} /> в VK?
+        </p>
+      );
+    case VkMode.VkVideo:
+      return (
+        <p>
+          Подписаться на <AccountLabel accountName={props.accountName} /> в VK
+          Видео?
+        </p>
+      );
+  }
+}
+
+function SubscribePopoverActions(props: {
+  onSecondarySubscribed: () => void;
   onCancel: () => void;
-  accountName: string;
-  vkMode: VkMode;
 }) {
-  const getLabel = () => {
-    switch (props.vkMode) {
-      case VkMode.Vk:
-        return (
-          <p>
-            Подписаться на <AccountLabel accountName={props.accountName} /> в
-            VK?
-          </p>
-        );
-      case VkMode.VkVideo:
-        return (
-          <p>
-            Подписаться на <AccountLabel accountName={props.accountName} /> в VK
-            Видео?
-          </p>
-        );
-    }
-  };
-
   return (
-    <div
-      className={
-        "flex flex-col items-center justify-center pt-2 pb-2 pl-1 pr-1 max-w-70"
-      }
-    >
-      <div className={"flex flex-row items-center justify-center m-3 gap-3"}>
-        <Logo vkMode={props.vkMode} />
-        {getLabel()}
-      </div>
-      <div className={"grid grid-cols-2 items-center gap-2 w-full"}>
-        <Button onPress={props.onCancel}>Нет</Button>
-        <Button
-          color={"primary"}
-          variant={"solid"}
-          onPress={props.onVkVideoSubscribe}
-        >
-          Подписаться
-        </Button>
-      </div>
-    </div>
+    <motion.div layout className={"grid grid-cols-2 items-center gap-2 w-full"}>
+      <Button onPress={props.onCancel}>Нет</Button>
+      <Button
+        color={"primary"}
+        variant={"solid"}
+        onPress={props.onSecondarySubscribed}
+      >
+        Подписаться
+      </Button>
+    </motion.div>
   );
 }
-
-function GoToVkVideoPopoverContent(props: {
-  goToVkVideo: () => void;
-  accountName: string;
-  vkMode: VkMode;
-}) {
-  const getLabel = () => {
-    switch (props.vkMode) {
-      case VkMode.Vk:
-        return (
-          <p>
-            Показать аккаунт <AccountLabel accountName={props.accountName} /> в
-            VK?
-          </p>
-        );
-      case VkMode.VkVideo:
-        return (
-          <p>
-            Показать аккаунт <AccountLabel accountName={props.accountName} /> в
-            VK Видео?
-          </p>
-        );
-    }
-  };
-
-  return (
-    <div
-      className={
-        "flex flex-col items-center justify-center pt-2 pb-2 pl-1 pr-1 max-w-70"
-      }
-    >
-      <div className={"flex flex-row items-center justify-center m-3 gap-3"}>
-        <Logo vkMode={props.vkMode} />
-        {getLabel()}
-      </div>
-      <div className={"grid grid-cols-1 items-center gap-2 w-full"}>
-        <Button
-          color={"secondary"}
-          endContent={<GoToIcon height={20} width={20} />}
-          variant={"solid"}
-          onPress={props.goToVkVideo}
-        >
-          Перейти
-        </Button>
-      </div>
-    </div>
-  );
+function GoToPopoverLabel(props: { accountName: string; vkMode: VkMode }) {
+  switch (props.vkMode) {
+    case VkMode.Vk:
+      return (
+        <p>
+          Показать аккаунт <AccountLabel accountName={props.accountName} /> в
+          VK?
+        </p>
+      );
+    case VkMode.VkVideo:
+      return (
+        <p>
+          Показать аккаунт <AccountLabel accountName={props.accountName} /> в VK
+          Видео?
+        </p>
+      );
+  }
 }
 
+function GoToPopoverActions(props: { goToVkVideo: () => void }) {
+  return (
+    <motion.div layout className={"grid grid-cols-1 items-center gap-2 w-full"}>
+      <Button
+        color={"secondary"}
+        endContent={<GoToIcon height={20} width={20} />}
+        variant={"solid"}
+        onPress={props.goToVkVideo}
+      >
+        Перейти
+      </Button>
+    </motion.div>
+  );
+}
 function AccountLabel(props: { accountName: string }) {
   return <span className={"font-bold text-nowrap"}>{props.accountName}</span>;
 }

@@ -17,6 +17,9 @@ export default {
       themes: {
           dark: {
               colors: {
+                  primary: {
+                      DEFAULT: "#0077FF"
+                  },
                   secondary: {
                       DEFAULT: "#ffffff",
                       foreground: "#000000",
@@ -24,6 +27,9 @@ export default {
               }
           },
           light: {
+              primary: {
+                  DEFAULT: "#0077FF"
+              },
               colors: {
                   secondary: {
                       DEFAULT: "#000000",

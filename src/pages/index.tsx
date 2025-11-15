@@ -1,10 +1,16 @@
+import { useState } from "react";
+
 import DefaultLayout from "@/layouts/default";
-import SubscribtionButton, {
+import {
+  SubscribtionButton,
   VkMode,
 } from "@/components/subsribtion/subscribtion-button.tsx";
 import { VkLogo, VkVideoLogo } from "@/components/logos.tsx";
 
 export default function IndexPage() {
+  const [isVkSubscribed, setIsVkSubscribed] = useState(false);
+  const [isVkVideoSubscribed, setIsVkVideoSubscribed] = useState(false);
+
   return (
     <DefaultLayout>
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10 h-full">
@@ -18,6 +24,10 @@ export default function IndexPage() {
             <VkVideoLogo height={32} width={32} />
             <SubscribtionButton
               accountName={"Subscribtion 1.0"}
+              isMainSubscribed={isVkVideoSubscribed}
+              isSecondarySubscribed={isVkSubscribed}
+              setIsMainSubscribed={setIsVkVideoSubscribed}
+              setIsSecondarySubscribed={setIsVkSubscribed}
               vkMode={VkMode.Vk}
             />
           </div>
@@ -30,7 +40,11 @@ export default function IndexPage() {
             <VkLogo height={32} width={32} />
             <SubscribtionButton
               accountName={"Subscribtion 1.0"}
-              vkMode={VkMode.Vk}
+              isMainSubscribed={isVkSubscribed}
+              isSecondarySubscribed={isVkVideoSubscribed}
+              setIsMainSubscribed={setIsVkSubscribed}
+              setIsSecondarySubscribed={setIsVkVideoSubscribed}
+              vkMode={VkMode.VkVideo}
             />
           </div>
         </div>
