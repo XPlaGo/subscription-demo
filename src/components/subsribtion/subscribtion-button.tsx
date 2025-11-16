@@ -101,6 +101,9 @@ export function SubscribtionButton(props: {
                   props.setIsSecondarySubscribed(true);
                   setOpened(false);
                 }}
+                onSecondaryUnsubscribed={() => {
+                  props.setIsSecondarySubscribed(false);
+                }}
               />
             </motion.div>
           </motion.div>
@@ -159,6 +162,7 @@ function SubscribePopoverLabel(props: { accountName: string; vkMode: VkMode }) {
 function SubscribePopoverActions(props: {
   vkMode: VkMode;
   onSecondarySubscribed: () => void;
+  onSecondaryUnsubscribed: () => void;
   onGoto: () => void;
 }) {
   const [isSecondarySubscribeLoading, setIsSecondarySubscribeLoading] =
@@ -198,6 +202,7 @@ function SubscribePopoverActions(props: {
         variant={"solid"}
         onPress={() => {
           setIsSecondarySubscribeLoading(true);
+          props.onSecondaryUnsubscribed();
           setTimeout(() => {
             setIsSecondarySubscribeLoading(false);
             props.onSecondarySubscribed();
