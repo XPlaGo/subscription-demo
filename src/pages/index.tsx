@@ -16,19 +16,21 @@ export default function IndexPage() {
         <div className="grid grid-rows-2 justify-center items-stretch gap-20 h-full">
           <SubscribtionButton
             accountName={"Subscribtion 1.0"}
-            isMainSubscribed={isVkVideoSubscribed}
-            isSecondarySubscribed={isVkSubscribed}
-            setIsMainSubscribed={setIsVkVideoSubscribed}
-            setIsSecondarySubscribed={setIsVkSubscribed}
-            vkMode={VkMode.VkVideo}
-          />
-          <SubscribtionButton
-            accountName={"Subscribtion 1.0"}
             isMainSubscribed={isVkSubscribed}
             isSecondarySubscribed={isVkVideoSubscribed}
+            secondaryAccountLink={"https://vkvideo.ru/@vkeducation"}
             setIsMainSubscribed={setIsVkSubscribed}
             setIsSecondarySubscribed={setIsVkVideoSubscribed}
             vkMode={VkMode.Vk}
+          />
+          <SubscribtionButton
+            accountName={"Subscribtion 1.0"}
+            isMainSubscribed={isVkVideoSubscribed}
+            isSecondarySubscribed={isVkSubscribed}
+            secondaryAccountLink={"https://vk.com/vkeducation"}
+            setIsMainSubscribed={setIsVkVideoSubscribed}
+            setIsSecondarySubscribed={setIsVkSubscribed}
+            vkMode={VkMode.VkVideo}
           />
         </div>
       </section>

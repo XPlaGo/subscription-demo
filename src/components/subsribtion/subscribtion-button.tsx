@@ -13,6 +13,7 @@ export enum VkMode {
 
 export function SubscribtionButton(props: {
   accountName: string;
+  secondaryAccountLink: string;
   vkMode: VkMode;
   isMainSubscribed: boolean;
   setIsMainSubscribed: (isMainSubscribed: boolean) => void;
@@ -32,14 +33,7 @@ export function SubscribtionButton(props: {
   };
 
   const goToAccount = () => {
-    switch (props.vkMode) {
-      case VkMode.VkVideo:
-        window.open("https://vk.ru", "_blank", "noopener,noreferrer");
-        break;
-      case VkMode.Vk:
-        window.open("https://vkvideo.ru", "_blank", "noopener,noreferrer");
-        break;
-    }
+    window.open(props.secondaryAccountLink, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -57,21 +51,18 @@ export function SubscribtionButton(props: {
           <motion.div
             layout
             className={
-              "flex flex-col items-center justify-center pt-2 pb-2 pl-1 pr-1 max-w-80"
+              "flex flex-col items-center justify-center pt-2 pb-2 pl-1 pr-1 w-80"
             }
           >
             <motion.div
               layout
               className={
-                "grid grid-cols-3 items-center justify-center m-3 gap-3"
+                "grid grid-cols-3 items-center justify-center m-3 gap-3 w-full"
               }
               style={{ gridTemplateColumns: "auto 1fr auto" }}
             >
               <SecondaryLogo vkMode={props.vkMode} />
-              <motion.div
-                key={"subscribeLabel"}
-                layout
-              >
+              <motion.div key={"subscribeLabel"} layout>
                 <SubscribePopoverLabel
                   accountName={props.accountName}
                   vkMode={props.vkMode}
@@ -159,18 +150,9 @@ export function SubscribtionButton(props: {
 function SubscribePopoverLabel(props: { accountName: string; vkMode: VkMode }) {
   switch (props.vkMode) {
     case VkMode.VkVideo:
-      return (
-        <p>
-          Подписаться на <AccountLabel accountName={props.accountName} /> в VK?
-        </p>
-      );
+      return <p>Подписаться на автора в VK?</p>;
     case VkMode.Vk:
-      return (
-        <p>
-          Рекомендовать канал автора{" "}
-          <AccountLabel accountName={props.accountName} /> в VK Видео?
-        </p>
-      );
+      return <p>Рекомендовать канал автора в VK Видео?</p>;
   }
 }
 
@@ -226,10 +208,6 @@ function SubscribePopoverActions(props: {
       </Button>
     </motion.div>
   );
-}
-
-function AccountLabel(props: { accountName: string }) {
-  return <span className={"font-bold text-nowrap"}>{props.accountName}</span>;
 }
 
 function MainLogo(props: { vkMode: VkMode }) {
