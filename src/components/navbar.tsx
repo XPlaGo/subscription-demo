@@ -20,7 +20,7 @@ export const Navbar = () => {
             href="/"
           >
             <VkLogo height={32} width={32} />
-            <p className="font-bold text-inherit">Subscription 1.0</p>
+            <p className="font-bold text-inherit">Команда Subscription 1.0</p>
           </Link>
         </NavbarBrand>
       </NavbarContent>
