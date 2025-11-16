@@ -153,9 +153,19 @@ export function SubscribtionButton(props: {
 function SubscribePopoverLabel(props: { accountName: string; vkMode: VkMode }) {
   switch (props.vkMode) {
     case VkMode.VkVideo:
-      return <p>Подписаться на сообщество автора в VK?</p>;
+      return (
+        <p>
+          Подписаться также на сообщество автора{" "}
+          <span className={"text-nowrap"}>в VK?</span>
+        </p>
+      );
     case VkMode.Vk:
-      return <p>Рекомендовать канал автора в VK Видео?</p>;
+      return (
+        <p>
+          Рекомендовать также канал автора{" "}
+          <span className={"text-nowrap"}>в VK Видео?</span>
+        </p>
+      );
   }
 }
 
