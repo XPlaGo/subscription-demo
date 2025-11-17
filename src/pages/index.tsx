@@ -23,15 +23,6 @@ export default function IndexPage() {
             setIsSecondarySubscribed={setIsVkVideoSubscribed}
             vkMode={VkMode.Vk}
           />
-          <SubscribtionButton
-            accountName={"Subscribtion 1.0"}
-            isMainSubscribed={isVkVideoSubscribed}
-            isSecondarySubscribed={isVkSubscribed}
-            secondaryAccountLink={"https://vk.com/vkeducation"}
-            setIsMainSubscribed={setIsVkVideoSubscribed}
-            setIsSecondarySubscribed={setIsVkSubscribed}
-            vkMode={VkMode.VkVideo}
-          />
         </div>
       </section>
     </DefaultLayout>
